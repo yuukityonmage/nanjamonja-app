@@ -1,0 +1,164 @@
+.monja-game {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+h2, h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.card {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  margin: 10px auto;
+  opacity: 0;
+  transform: scale(0.5) rotateY(90deg);
+  animation: drawCard 1.5s forwards;
+}
+
+@keyframes drawCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotateY(90deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0);
+  }
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.players-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+}
+
+.player-area {
+  margin: 0.5rem;
+  padding: 1rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.player-area.hover {
+  border-color: #4caf50;
+}
+
+.player-area h2 {
+  font-size: 1.5rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.small-card {
+  max-width: 50px;
+  height: auto;
+  margin: 0.5rem;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+@media (max-width: 1000px) {
+  .players-container {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .player-area {
+    width: 45%;
+    box-sizing: border-box;
+  }
+
+  /* .card {
+    width: 60%;
+    height: auto;
+  } */
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  /* .card {
+    width: 60%;
+    height: auto;
+  } */
+
+  .small-card {
+    max-width: 40px;
+    margin: 0.5rem;
+  }
+
+  .players-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .player-area {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

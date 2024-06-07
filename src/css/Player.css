@@ -1,0 +1,131 @@
+.player-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.player-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.player-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.player-label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.player-input,
+.player-button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.file-button{
+  width: 20%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+}
+
+.player-input {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.player-button {
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.player-button:hover {
+  background-color: #0056b3;
+}
+
+.player-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.player-item {
+  font-size: 18px;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.uploaded-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.file-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.file-input label {
+  font-size: 16px;
+}
+
+.file-input input {
+  padding: 8px;
+  font-size: 16px;
+}
+
+.file-button {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.file-button:hover {
+  border-color: #0056b3;
+  background-color: #0056b3;
+}
