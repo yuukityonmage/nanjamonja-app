@@ -2,7 +2,7 @@
   "name": "nanjamonja-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yuukityonmage.github.io/nanjamonja-app/",
+  "homepage": "https://yuukityonmage.github.io/",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -15,6 +15,7 @@
     "@types/node": "^16.18.98",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "gh-pages": "^6.1.1",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
     "react-dnd": "^16.0.1",
@@ -31,10 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "rm": "rm -rf docs",
-    "mv": "mv build docs",
-    "git": "git add . && git commit && git push origin master",
-    "deploy": "npm run rm && npm run build && npm run mv && npm run git"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
