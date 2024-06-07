@@ -11,15 +11,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<Home />} />
-          <Route path="/Monja" element={<Monja />} />
-          <Route path="/Player" element={<Player />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Monja" element={<Monja />} />
+        <Route path="/Player" element={<Player />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
     </ThemeProvider>
-  )
+  );
 }
+
 export default App;
