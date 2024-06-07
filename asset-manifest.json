@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/nanjamonja-app/static/css/main.d7208780.css",
+    "main.js": "/nanjamonja-app/static/js/main.6f20cfaf.js",
+    "index.html": "/nanjamonja-app/index.html",
+    "main.d7208780.css.map": "/nanjamonja-app/static/css/main.d7208780.css.map",
+    "main.6f20cfaf.js.map": "/nanjamonja-app/static/js/main.6f20cfaf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d7208780.css",
+    "static/js/main.6f20cfaf.js"
+  ]
+}
