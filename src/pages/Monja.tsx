@@ -19,6 +19,7 @@ const Monja: React.FC = () => {
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [playerScores, setPlayerScores] = useState<{ [key: string]: number }>({});
   const [playerCards, setPlayerCards] = useState<{ [key: string]: string[] }>({});
+  const [isSelectingPlayer, setIsSelectingPlayer] = useState(false);
 
   useEffect(() => {
     setImageCounts(images.reduce((acc: { [key: string]: number }, image: string) => {
@@ -42,25 +43,29 @@ const Monja: React.FC = () => {
   }, [players, images]);
 
   const drawCard = () => {
-    const availableImages = images.filter((image) => imageCounts[image] < 2);
-  
+    const availableImages = images.filter((image) => imageCounts[image] < 4);
+
     if (availableImages.length === 0) return;
-  
+
     const randomIndex = Math.floor(Math.random() * availableImages.length);
     const selectedImage = availableImages[randomIndex];
-  
+
     // 選択されたカードにアニメーションを適用するための一時的な状態
     setCurrentImage(null);
-  
+
     setTimeout(() => {
       setImageCounts({
         ...imageCounts,
         [selectedImage]: imageCounts[selectedImage] + 1,
       });
-  
+
       setCurrentImage(selectedImage);
       setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
     }, 500); // 少しの遅延を追加してアニメーションをトリガー
+  };
+
+  const getCard = () => {
+
   };
 
   const handleDrop = (player: string, item: { image: string }) => {
@@ -75,7 +80,31 @@ const Monja: React.FC = () => {
     setCurrentImage(null);
   };
 
-  const gameFinished = Object.values(imageCounts).every(count => count >= 2);
+  const handlePlayerSelection = (playerName: string) => {
+    if (!currentImage) return;
+
+    setPlayerCards(prev => ({
+      ...prev,
+      [playerName]: [...prev[playerName], currentImage],
+    }));
+    setPlayerScores(prev => ({
+      ...prev,
+      [playerName]: prev[playerName] + 1,
+    }));
+    setImageCounts(prev => ({
+      ...prev,
+      [currentImage]: prev[currentImage] + 1,
+    }));
+    setCurrentImage(null);
+    setIsSelectingPlayer(false);
+  };
+
+  const initiatePlayerSelection = () => {
+    if (!currentImage) return;
+    setIsSelectingPlayer(true);
+  };
+
+  const gameFinished = Object.values(imageCounts).every(count => count >= 4);
 
   return (
     <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
@@ -85,13 +114,23 @@ const Monja: React.FC = () => {
           <>
             <p>現在のプレイヤー: {players[currentPlayerIndex]?.name}</p>
             {currentImage && (
-              <DraggableCard image={currentImage} isDraggable={imageCounts[currentImage] > 1} />
-            )}
-            <button onClick={drawCard} disabled={gameFinished}>
-              カードを引く
-            </button>
-          </>
-        )}
+            <>
+              <img src={currentImage} alt="Card" className="card"/>
+              <button onClick={initiatePlayerSelection}>カードを取得</button>
+              {isSelectingPlayer && (
+                <div>
+                  {players.map(player => (
+                    <button className='assign-button' key={player.id} onClick={() => handlePlayerSelection(player.name)}>
+                      {player.name}にこのカードを割り当てる
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+          <button onClick={drawCard} disabled={gameFinished || isSelectingPlayer}>カードを引く</button>
+        </>
+      )}
         {gameFinished && (
           <>
             <h2>結果発表</h2>
