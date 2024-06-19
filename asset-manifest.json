@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/nanjamonja-app/static/css/main.d3c5c78c.css",
-    "main.js": "/nanjamonja-app/static/js/main.fa344372.js",
-    "index.html": "/nanjamonja-app/index.html",
-    "main.d3c5c78c.css.map": "/nanjamonja-app/static/css/main.d3c5c78c.css.map",
-    "main.fa344372.js.map": "/nanjamonja-app/static/js/main.fa344372.js.map"
+    "main.css": "/static/css/main.88da6458.css",
+    "main.js": "/static/js/main.acd7abb4.js",
+    "index.html": "/index.html",
+    "main.88da6458.css.map": "/static/css/main.88da6458.css.map",
+    "main.acd7abb4.js.map": "/static/js/main.acd7abb4.js.map"
   },
   "entrypoints": [
-    "static/css/main.d3c5c78c.css",
-    "static/js/main.fa344372.js"
+    "static/css/main.88da6458.css",
+    "static/js/main.acd7abb4.js"
   ]
 }
