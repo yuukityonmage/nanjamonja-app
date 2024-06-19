@@ -9,14 +9,16 @@ interface Player {
 
 const Player: React.FC = () => {
     const [name, setName] = useState<string>('');
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [images, setImages] = useState<string[]>([]);
-    const maxPlayers = 5;
-    const maxImages = 10;
+    const [players, setPlayers] = useState<Player[]>([]); // プレイヤーの配列
+    const [images, setImages] = useState<string[]>([]); // カードの配列
+    const maxPlayers = 6; // 最大プレイ人数
+    const maxImages = 15; // 最大カード数
 
+    // プレイヤー名入力フォームの状態管理
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
     };
+
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
@@ -24,7 +26,7 @@ const Player: React.FC = () => {
             setPlayers([...players, { id: players.length + 1, name }]);
             setName('');
         } else if (players.length >= maxPlayers) {
-            alert('5人までしか登録できません。');
+            alert(maxPlayers + '人までしか登録できません。');
         }
     };
 
@@ -40,6 +42,13 @@ const Player: React.FC = () => {
                     if (e.target) {
                         uploadedImages.push(e.target.result as string);
                         if (uploadedImages.length === files.length) {
+                            if (images.length >= maxImages) {
+                                console.log('10枚まで');
+                                alert(maxImages + '枚までしか登録できません。');
+                            }
+                            if (images.length + uploadedImages.length > maxImages) {
+                                alert(maxImages + 1 + '枚目以降を削除しました。');
+                            }
                             const newImages = [...images, ...uploadedImages].slice(0, maxImages);
                             setImages(newImages);
                             sessionStorage.setItem('uploadedImages', JSON.stringify(newImages));
@@ -55,7 +64,11 @@ const Player: React.FC = () => {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        navigate('/Monja', { state: { players, images } });
+        if (players.length > 0 && images.length > 0) {
+            navigate('/Monja', { state: { players, images } });
+        } else {
+            alert('プレイヤー登録、カード作成を行ってください');
+        }
     };
 
     return (
@@ -103,7 +116,7 @@ const Player: React.FC = () => {
                 )}
             </div>
             <button className="file-button" onClick={handleButtonClick}>
-                    ゲームスタート
+                ゲームスタート
             </button>
         </div>
     );

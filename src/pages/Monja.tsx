@@ -11,9 +11,12 @@ const Monja: React.FC = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [imageCounts, setImageCounts] = useState<{ [key: string]: number }>({});
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [drawCardCount, setDrawCardCount] = useState(0);
   const [playerScores, setPlayerScores] = useState<{ [key: string]: number }>({});
   const [playerCards, setPlayerCards] = useState<{ [key: string]: string[] }>({});
   const [selectedPlayer, setSelectedPlayer] = useState<string>(players[0].name);
+  const [isSoundPlayed, setIsSoundPlayed] = useState(false);
+
 
   useEffect(() => {
     setImageCounts(images.reduce((acc: { [key: string]: number }, image: string) => {
@@ -36,7 +39,17 @@ const Monja: React.FC = () => {
     setPlayerCards(initialPlayerCards);
   }, [players, images]);
 
+  useEffect(() => {
+    if (drawCardCount >= images.length * 4 && !isSoundPlayed) {
+      const audio = new Audio('/sounds/celebration.mp3');
+      audio.play();
+      setIsSoundPlayed(true);
+    }
+  }, [drawCardCount, images.length, isSoundPlayed]);
+  
+
   const drawCard = () => {
+    setDrawCardCount(drawCardCount + 1);
     const availableImages = images.filter((image) => imageCounts[image] < 4);
 
     if (availableImages.length === 0) return;
@@ -74,9 +87,10 @@ const Monja: React.FC = () => {
       [currentImage]: prev[currentImage] + 1,
     }));
     setCurrentImage(null);
+    setSelectedPlayer(players[0].name);
   };
 
-  const gameFinished = Object.values(imageCounts).every(count => count >= 4);
+  const gameFinished = drawCardCount > images.length * 4;
 
   return (
     <div className="monja-game">
@@ -101,19 +115,22 @@ const Monja: React.FC = () => {
         </>
       )}
       {gameFinished && (
-        <>
-          <h2>結果発表</h2>
+        <div className="results-container">
+          <h2 className="results-title">結果発表</h2>
+          <div className="fireworks"></div>
+          <div className="fireworks"></div>
+          <div className="fireworks"></div>
           {players.map((player) => (
-            <div key={player.id}>
+            <div key={player.id} className="results-player">
               <h3>{player.name}の得点: {playerScores[player.name]}点</h3>
-              <div className="cards">
+              <div className="results-cards">
                 {playerCards[player.name]?.map((card, index) => (
-                  <img key={index} src={card} alt="Card" className="small-card" />
+                  <img key={index} src={card} alt="Card" className="results-card" />
                 ))}
               </div>
             </div>
           ))}
-        </>
+        </div>
       )}
       <div className="players-container">
         {players.map((player) => (

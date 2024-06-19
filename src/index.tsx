@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Router basename="/nanjamonja-app">
+    <Router basename="/original-monja-app">
       <App />
     </Router>
   </React.StrictMode>
