@@ -11,7 +11,7 @@ const Home = () => {
     return (
         <div className="App">
             <header className="App-header">
-                <img src="./images/logo.jpg" className="App-logo" alt="logo" />
+                <img src="../images/logo.jpg" className="App-logo" alt="logo" />
                 <p>
                 オリジナルモンジャ
                 </p>
