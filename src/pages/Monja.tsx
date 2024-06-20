@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import '../css/Monja.css';
 import RadioButton from '../components/radio';
+import Confetti from '../components/confetti';
 
 const Monja: React.FC = () => {
   const location = useLocation();
@@ -17,7 +18,9 @@ const Monja: React.FC = () => {
   const [selectedPlayer, setSelectedPlayer] = useState<string>(players[0].name);
   const [isSoundPlayed, setIsSoundPlayed] = useState(false);
 
-
+  // レンダリングの後にuseEffectの中身が実行される
+  // 第二引数でuseEffectの中身を実行するタイミングを指定できる
+  // 第二引数はからの配列だとリロード時の1回のみ、変数を入れると変数の値が変わったタイミングでuseEffectの中身が実行される
   useEffect(() => {
     setImageCounts(images.reduce((acc: { [key: string]: number }, image: string) => {
       acc[image] = 0;
@@ -40,13 +43,13 @@ const Monja: React.FC = () => {
   }, [players, images]);
 
   useEffect(() => {
-    if (drawCardCount >= images.length * 4 && !isSoundPlayed) {
+    if (drawCardCount > images.length * 4 && !isSoundPlayed) {
       const audio = new Audio('/sounds/celebration.mp3');
       audio.play();
       setIsSoundPlayed(true);
     }
   }, [drawCardCount, images.length, isSoundPlayed]);
-  
+
 
   const drawCard = () => {
     setDrawCardCount(drawCardCount + 1);
@@ -60,12 +63,12 @@ const Monja: React.FC = () => {
     // 選択されたカードにアニメーションを適用するための一時的な状態
     setCurrentImage(null);
 
-    setTimeout(() => {
-      setImageCounts({
-        ...imageCounts,
-        [selectedImage]: imageCounts[selectedImage] + 1,
-      });
+    setImageCounts({
+      ...imageCounts,
+      [selectedImage]: imageCounts[selectedImage] + 1,
+    });
 
+    setTimeout(() => {
       setCurrentImage(selectedImage);
       setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
     }, 500); // 少しの遅延を追加してアニメーションをトリガー
@@ -81,10 +84,6 @@ const Monja: React.FC = () => {
     setPlayerScores(prev => ({
       ...prev,
       [playerName]: prev[playerName] + 1,
-    }));
-    setImageCounts(prev => ({
-      ...prev,
-      [currentImage]: prev[currentImage] + 1,
     }));
     setCurrentImage(null);
     setSelectedPlayer(players[0].name);
@@ -115,11 +114,9 @@ const Monja: React.FC = () => {
         </>
       )}
       {gameFinished && (
+        <div>
+        <Confetti></Confetti>
         <div className="results-container">
-          <h2 className="results-title">結果発表</h2>
-          <div className="fireworks"></div>
-          <div className="fireworks"></div>
-          <div className="fireworks"></div>
           {players.map((player) => (
             <div key={player.id} className="results-player">
               <h3>{player.name}の得点: {playerScores[player.name]}点</h3>
@@ -131,8 +128,10 @@ const Monja: React.FC = () => {
             </div>
           ))}
         </div>
+        </div>
       )}
-      <div className="players-container">
+      {!gameFinished && (
+        <div className="players-container">
         {players.map((player) => (
           <div key={player.id} className="player-area">
             <h2>{player.name}</h2>
@@ -145,6 +144,7 @@ const Monja: React.FC = () => {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 };
