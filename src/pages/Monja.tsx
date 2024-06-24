@@ -7,7 +7,7 @@ import Confetti from '../components/confetti';
 
 const Monja: React.FC = () => {
   const location = useLocation();
-  const { players = [], images = [] } = location.state as { players?: { id: number, name: string }[], images?: string[] };
+  const { players = [], images = [], countPerCard = 3 } = location.state as { players?: { id: number, name: string }[], images?: string[], countPerCard?: number };
 
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [imageCounts, setImageCounts] = useState<{ [key: string]: number }>({});
@@ -43,7 +43,7 @@ const Monja: React.FC = () => {
   }, [players, images]);
 
   useEffect(() => {
-    if (drawCardCount > images.length * 4 && !isSoundPlayed) {
+    if (drawCardCount > images.length * countPerCard && !isSoundPlayed) {
       const audio = new Audio('/sounds/celebration.mp3');
       audio.play();
       setIsSoundPlayed(true);
@@ -53,7 +53,7 @@ const Monja: React.FC = () => {
 
   const drawCard = () => {
     setDrawCardCount(drawCardCount + 1);
-    const availableImages = images.filter((image) => imageCounts[image] < 4);
+    const availableImages = images.filter((image) => imageCounts[image] < countPerCard);
 
     if (availableImages.length === 0) return;
 
@@ -89,61 +89,65 @@ const Monja: React.FC = () => {
     setSelectedPlayer(players[0].name);
   };
 
-  const gameFinished = drawCardCount > images.length * 4;
+  const gameFinished = drawCardCount > images.length * countPerCard;
 
   return (
     <div className="monja-game">
-      <h1>オリジナルモンジャ</h1>
+      <h1>MuccyaMonja</h1>
       {!gameFinished && (
         <>
-          <p>現在のプレイヤー: {players[currentPlayerIndex]?.name}</p>
+          <p>Current Player: {players[currentPlayerIndex]?.name}</p>
           {currentImage && (
             <>
               <img src={currentImage} alt="Card" className="card" />
               {imageCounts[currentImage] > 1 && (
                 <div>
+                  <h2>Call the card name!</h2>
                   <RadioButton options={players.map(player => ({ label: player.name, value: player.name }))} onSelect={setSelectedPlayer} />
                   <button className='assign-button' onClick={() => handlePlayerSelection(selectedPlayer)}>
-                    {selectedPlayer}にこのカードを割り当てる
+                    Assign the card to {selectedPlayer}
                   </button>
                 </div>
               )}
+              {imageCounts[currentImage] < 1 && (
+                <h2>Name the card! </h2>
+              )}
             </>
           )}
-          <button onClick={drawCard} disabled={gameFinished}>カードを引く</button>
+          <button onClick={drawCard} disabled={gameFinished}>Draw a card</button>
         </>
       )}
       {gameFinished && (
         <div>
-        <Confetti></Confetti>
-        <div className="results-container">
+          <Confetti></Confetti>
+          <div className="results-container">
+            {players.map((player) => (
+              <div key={player.id} className="results-player">
+                <h3>{player.name} Score: {playerScores[player.name]}</h3>
+                <div className="results-cards">
+                  {playerCards[player.name]?.map((card, index) => (
+                    <img key={index} src={card} alt="Card" className="results-card" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {!gameFinished && (
+        <div className="players-container">
           {players.map((player) => (
-            <div key={player.id} className="results-player">
-              <h3>{player.name}の得点: {playerScores[player.name]}点</h3>
-              <div className="results-cards">
+            <div key={player.id} className="player-area">
+              <h2>{player.name}</h2>
+              <p>Score: {playerScores[player.name]}</p>
+              <div className="cards">
                 {playerCards[player.name]?.map((card, index) => (
-                  <img key={index} src={card} alt="Card" className="results-card" />
+                  <img key={index} src={card} alt="Card" className="small-card" />
                 ))}
               </div>
             </div>
           ))}
         </div>
-        </div>
-      )}
-      {!gameFinished && (
-        <div className="players-container">
-        {players.map((player) => (
-          <div key={player.id} className="player-area">
-            <h2>{player.name}</h2>
-            <p>得点: {playerScores[player.name]}</p>
-            <div className="cards">
-              {playerCards[player.name]?.map((card, index) => (
-                <img key={index} src={card} alt="Card" className="small-card" />
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
       )}
     </div>
   );

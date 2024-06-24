@@ -13,7 +13,7 @@ const Home = () => {
             <header className="App-header">
                 <img src="../images/logo.jpg" className="App-logo" alt="logo" />
                 <p>
-                オリジナルモンジャ
+                MuccyaMonja
                 </p>
                 <button onClick={handleButtonClick}>
                     Let's Play

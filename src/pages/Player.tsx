@@ -12,7 +12,8 @@ const Player: React.FC = () => {
     const [players, setPlayers] = useState<Player[]>([]); // プレイヤーの配列
     const [images, setImages] = useState<string[]>([]); // カードの配列
     const maxPlayers = 6; // 最大プレイ人数
-    const maxImages = 15; // 最大カード数
+    const maxImages = 10; // 最大カード数
+    const [countPerCard, setCountPerCard] = useState<number>(3);
 
     // プレイヤー名入力フォームの状態管理
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +27,7 @@ const Player: React.FC = () => {
             setPlayers([...players, { id: players.length + 1, name }]);
             setName('');
         } else if (players.length >= maxPlayers) {
-            alert(maxPlayers + '人までしか登録できません。');
+            alert('You can only register up to' + maxPlayers + 'people');
         }
     };
 
@@ -43,11 +44,10 @@ const Player: React.FC = () => {
                         uploadedImages.push(e.target.result as string);
                         if (uploadedImages.length === files.length) {
                             if (images.length >= maxImages) {
-                                console.log('10枚まで');
-                                alert(maxImages + '枚までしか登録できません。');
+                                alert('You can only register up to' + maxImages + 'cards');
                             }
                             if (images.length + uploadedImages.length > maxImages) {
-                                alert(maxImages + 1 + '枚目以降を削除しました。');
+                                alert('Removed after' + (maxImages + 1) + 'th');
                             }
                             const newImages = [...images, ...uploadedImages].slice(0, maxImages);
                             setImages(newImages);
@@ -61,23 +61,26 @@ const Player: React.FC = () => {
         }
     };
 
+    const handleCountPerCardChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setCountPerCard(Number(event.target.value));
+    };
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
         if (players.length > 0 && images.length > 0) {
-            navigate('/Monja', { state: { players, images } });
+            navigate('/Monja', { state: { players, images, countPerCard} });
         } else {
-            alert('プレイヤー登録、カード作成を行ってください');
+            alert('Regist Player and create cards');
         }
     };
 
     return (
         <div>
             <div className="player-container">
-                <h2 className="player-title">プレイヤー登録</h2>
+                <h2 className="player-title">Player Registration</h2>
                 <form onSubmit={handleSubmit} className="player-form">
                     <label className="player-label">
-                        名前:
+                        Name:
                         <input
                             type="text"
                             value={name}
@@ -85,9 +88,9 @@ const Player: React.FC = () => {
                             className="player-input"
                         />
                     </label>
-                    <button type="submit" className="player-button">登録</button>
+                    <button type="submit" className="player-button">Regist</button>
                 </form>
-                <h3 className="player-subtitle">登録済みのプレイヤー</h3>
+                <h3 className="player-subtitle">Registered Player</h3>
                 <ul className="player-list">
                     {players.map(player => (
                         <li key={player.id} className="player-item">{player.id}. {player.name}</li>
@@ -95,10 +98,10 @@ const Player: React.FC = () => {
                 </ul>
             </div>
             <div className="player-container">
-                <h3 className="player-subtitle">カード作成</h3>
+                <h3 className="player-subtitle">Card Making</h3>
                 <div className="file-input">
                     <label>
-                        ファイル選択:
+                        Chooce files:
                         <input
                             type="file"
                             accept="image/*"
@@ -115,8 +118,21 @@ const Player: React.FC = () => {
                     </div>
                 )}
             </div>
+            <div className="player-container">
+                <h3 className="player-subtitle">Card amount</h3>
+
+                <div className='card-amount-row'>
+                    <p>Count per card</p>
+                    <select value={countPerCard} onChange={handleCountPerCardChange}>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <p>Total number of cards: {images.length * countPerCard}</p>
+
+            </div>
             <button className="file-button" onClick={handleButtonClick}>
-                ゲームスタート
+                Game Start
             </button>
         </div>
     );
